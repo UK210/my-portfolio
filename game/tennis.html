@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>テニスゲーム</title>
+  <link rel="stylesheet" href="tennis.css" />
+</head>
+<body>
+  <h1>🎾 テニスゲーム</h1>
+  <div id="gameInfo">
+    <div>スコア: <span id="score">0</span></div>
+    <div>レベル: <span id="level">1</span></div>
+    <div>ゲーム状態: <span id="gameStatus">プレイ中</span></div>
+  </div>
+  <div id="controls">
+    <p>🎮 操作方法: マウスでパドルを操作 | スペースキーで一時中断/再開</p>
+  </div>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <div id="gameOverScreen" style="display: none;">
+    <h2>ゲームオーバー！</h2>
+    <p>最終スコア: <span id="finalScore">0</span></p>
+    <button onclick="restartGame()">もう一度プレイ</button>
+  </div>
+  <div id="pauseScreen" style="display: none;">
+    <h2>⏸️ 一時中断</h2>
+    <p>スペースキーを押してゲームを再開</p>
+    <button onclick="togglePause()">ゲーム再開</button>
+  </div>
+  <script src="tennis.js"></script>
+</body>
+</html>

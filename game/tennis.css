@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: #1a1a1a;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#gameInfo {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#gameInfo div {
+  background-color: #333;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+#controls {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+#gameCanvas {
+  border: 2px solid #333;
+  background-color: #000;
+  display: block;
+}
+
+#gameOverScreen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #fff;
+}
+
+#gameOverScreen button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+#gameOverScreen button:hover {
+  background-color: #45a049;
+}
+
+#pauseScreen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #ffa500;
+}
+
+#pauseScreen button {
+  background-color: #ffa500;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+#pauseScreen button:hover {
+  background-color: #ff8c00;
+}
