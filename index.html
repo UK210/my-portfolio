@@ -5,24 +5,105 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>橘右京のポートフォリオ</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <h1>橘右京のポートフォリオ</h1>
-    <nav>
-      <a href="game/tennis.html">🎾 テニスゲーム</a>
-    </nav>
+  <!-- 背景アニメーション -->
+  <div class="background-animation">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <h1 class="logo-text">UKYO</h1>
+        <span class="logo-subtitle">PORTFOLIO</span>
+      </div>
+      <nav class="nav">
+        <a href="game/tennis.html" class="nav-link">
+          <span class="nav-icon">🎾</span>
+          <span class="nav-text">テニスゲーム</span>
+        </a>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <section>
-      <h2>自己紹介</h2>
-      <p>プログラミング学習中。JavaScriptでゲーム開発挑戦中！</p>
+  <main class="main">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h2 class="hero-title">
+            <span class="title-line">橘右京</span>
+            <span class="title-line">のポートフォリオ</span>
+          </h2>
+          <p class="hero-description">
+            プログラミング学習中。<br>
+            JavaScriptでゲーム開発挑戦中！
+          </p>
+          <div class="skills">
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">HTML5</span>
+            <span class="skill-tag">CSS3</span>
+            <span class="skill-tag">ゲーム開発</span>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="code-block">
+            <div class="code-line">
+              <span class="code-keyword">function</span>
+              <span class="code-function">createGame()</span>
+              <span class="code-bracket">{</span>
+            </div>
+            <div class="code-line">
+              <span class="code-space"></span>
+              <span class="code-comment">// ゲームを作成中...</span>
+            </div>
+            <div class="code-line">
+              <span class="code-bracket">}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects">
+      <div class="container">
+        <h3 class="section-title">プロジェクト</h3>
+        <div class="project-card">
+          <div class="project-icon">🎾</div>
+          <div class="project-content">
+            <h4 class="project-title">テニスゲーム</h4>
+            <p class="project-description">
+              ポイント制、スピードアップ、一時中断機能付きの
+              モダンなテニスゲーム
+            </p>
+            <a href="game/tennis.html" class="project-link">
+              プレイする →
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <p>© 2025 UKYO TACHIBANA</p>
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 UKYO TACHIBANA</p>
+    </div>
   </footer>
+
+  <script>
+    // パーティクルアニメーション
+    document.addEventListener('DOMContentLoaded', function() {
+      const particles = document.querySelectorAll('.particle');
+      particles.forEach((particle, index) => {
+        particle.style.animationDelay = `${index * 0.5}s`;
+      });
+    });
+  </script>
 </body>
 </html>
