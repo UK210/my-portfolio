@@ -3,9 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>橘右京のポートフォリオ</title>
+  <title>橘右京のポートフォリオ - ゲーム開発者</title>
+  <meta name="description" content="JavaScriptでゲーム開発に挑戦中。テニスゲームなどのブラウザゲームを公開しています。" />
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5958889768519885"
+       crossorigin="anonymous"></script>
 </head>
 <body>
   <!-- 背景アニメーション -->
@@ -33,6 +38,17 @@
   </header>
 
   <main class="main">
+    <!-- 上部広告エリア -->
+    <div class="ad-container ad-top">
+      <div class="ad-label">スポンサー広告</div>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-5958889768519885"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="true"></ins>
+    </div>
+
     <section class="hero">
       <div class="container">
         <div class="hero-content">
@@ -88,6 +104,84 @@
         </div>
       </div>
     </section>
+
+    <!-- アフィリエイトセクション -->
+    <section class="affiliate-section">
+      <div class="container">
+        <h3 class="section-title">🎮 おすすめゲーム関連商品</h3>
+        <p class="affiliate-description">ゲーム開発や快適なゲームプレイに役立つアイテム</p>
+        
+        <div class="affiliate-grid">
+          <!-- 商品1: ゲーミングマウス -->
+          <div class="affiliate-card">
+            <div class="affiliate-image-placeholder">
+              <span class="affiliate-icon">🖱️</span>
+            </div>
+            <h4>Logicool G502 HERO</h4>
+            <p class="affiliate-desc">高精度25Kセンサー搭載。プログラミングにもゲームにも最適な万能マウス。</p>
+            <div class="affiliate-price">参考価格: ¥8,000前後</div>
+            <a href="https://www.amazon.co.jp/dp/B07GBZ4Q68?tag=ukgamesite-22" class="affiliate-button" target="_blank" rel="nofollow noopener">
+              Amazonで見る
+            </a>
+          </div>
+
+          <!-- 商品2: プログラミング学習本 -->
+          <div class="affiliate-card">
+            <div class="affiliate-image-placeholder">
+              <span class="affiliate-icon">📚</span>
+            </div>
+            <h4>JavaScript本格入門</h4>
+            <p class="affiliate-desc">JavaScriptを基礎から学べる定番書。ゲーム開発に必須の知識が身につく。</p>
+            <div class="affiliate-price">参考価格: ¥3,000前後</div>
+            <a href="https://www.amazon.co.jp/dp/4297114089?tag=ukgamesite-22" class="affiliate-button" target="_blank" rel="nofollow noopener">
+              Amazonで見る
+            </a>
+          </div>
+
+          <!-- 商品3: Nintendo Switch -->
+          <div class="affiliate-card">
+            <div class="affiliate-image-placeholder">
+              <span class="affiliate-icon">🎮</span>
+            </div>
+            <h4>Nintendo Switch (有機EL)</h4>
+            <p class="affiliate-desc">7インチ有機ELディスプレイで鮮やか。ゲーム開発の参考にも最適。</p>
+            <div class="affiliate-price">参考価格: ¥37,000前後</div>
+            <a href="https://www.amazon.co.jp/dp/B098RKWHHZ?tag=ukgamesite-22" class="affiliate-button" target="_blank" rel="nofollow noopener">
+              Amazonで見る
+            </a>
+          </div>
+
+          <!-- 商品4: ゲーミングモニター -->
+          <div class="affiliate-card">
+            <div class="affiliate-image-placeholder">
+              <span class="affiliate-icon">🖥️</span>
+            </div>
+            <h4>BenQ MOBIUZ 23.8インチ</h4>
+            <p class="affiliate-desc">144Hz高リフレッシュレート。開発作業とゲームプレイの両方に活躍。</p>
+            <div class="affiliate-price">参考価格: ¥25,000前後</div>
+            <a href="https://www.amazon.co.jp/dp/B09LCBQJ7G?tag=ukgamesite-22" class="affiliate-button" target="_blank" rel="nofollow noopener">
+              Amazonで見る
+            </a>
+          </div>
+        </div>
+
+        <p class="affiliate-disclaimer">
+          ※ 価格は参考価格です。最新の価格は各リンク先でご確認ください。<br>
+          ※ 当サイトはAmazonアソシエイト・プログラムの参加者です。
+        </p>
+      </div>
+    </section>
+
+    <!-- 下部広告エリア -->
+    <div class="ad-container ad-bottom">
+      <div class="ad-label">スポンサー広告</div>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-5958889768519885"
+           data-ad-slot="auto"
+           data-ad-format="horizontal"
+           data-full-width-responsive="true"></ins>
+    </div>
   </main>
 
   <footer class="footer">
@@ -104,6 +198,12 @@
         particle.style.animationDelay = `${index * 0.5}s`;
       });
     });
+  </script>
+
+  <!-- AdSense広告の初期化 -->
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
 </body>
 </html>
