@@ -252,8 +252,27 @@ body {
 }
 
 h1 {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   text-align: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  background: linear-gradient(45deg, #00f7ff, #00d4ff, #0088ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(0, 247, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(0, 247, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(0, 247, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8);
+  }
 }
 
 #topInfo {
@@ -265,23 +284,28 @@ h1 {
 }
 
 .info-left, .info-right {
-  background-color: #333;
+  background: rgba(0, 0, 0, 0.7);
   padding: 10px 20px;
   border-radius: 8px;
-  border: 2px solid #555;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid #00d4ff;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .info-left div, .info-right div {
   font-size: 16px;
-  font-weight: bold;
-  color: #fff;
+  font-weight: 700;
+  font-family: 'Rajdhani', sans-serif;
+  color: #00f7ff;
   margin: 5px 0;
+  text-shadow: 0 0 5px rgba(0, 247, 255, 0.5);
 }
 
 .info-left span, .info-right span {
-  color: #4CAF50;
+  color: #00ff00;
   font-size: 18px;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
 }
 
 #controls {
@@ -289,6 +313,26 @@ h1 {
   margin-bottom: 10px;
   color: #666;
   font-size: 14px;
+}
+
+.sound-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 5px;
+  transition: background-color 0.3s;
+}
+
+.sound-button:hover {
+  background-color: #45a049;
+}
+
+.sound-button.muted {
+  background-color: #f44336;
 }
 
 #gameCanvas {

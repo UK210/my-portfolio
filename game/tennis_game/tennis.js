@@ -1,6 +1,181 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// サウンド設定
+let soundEnabled = true;
+let audioContext = null;
+
+// AudioContextの初期化
+function initAudioContext() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioContext;
+}
+
+// 効果音を生成する関数（大幅拡張版）
+function playSound(type) {
+  if (!soundEnabled) return;
+  
+  try {
+    const ctx = initAudioContext();
+    const now = ctx.currentTime;
+    
+    switch(type) {
+      case 'paddleHit': // パドルヒット音（高音でクリアな音）
+        {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = 800;
+          osc.type = 'sine';
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        }
+        break;
+        
+      case 'blockBreak': // ブロック破壊音（クラッシュ音）
+        {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = 200;
+          osc.type = 'sawtooth';
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        }
+        break;
+        
+      case 'itemPositive': // ポジティブアイテム（高音で明るい）
+        {
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(ctx.destination);
+          osc1.frequency.value = 1000;
+          osc2.frequency.value = 1200;
+          osc1.type = 'sine';
+          osc2.type = 'sine';
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.3);
+          osc2.stop(now + 0.3);
+        }
+        break;
+        
+      case 'itemNegative': // ネガティブアイテム（低音で暗い）
+        {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = 100;
+          osc.type = 'sawtooth';
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        }
+        break;
+        
+      case 'paddleGrow': // パドル拡大音（マリオのキノコ風）
+        {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'square';
+          gain.gain.setValueAtTime(0.3, now);
+          
+          // 音程を上昇させる
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.3);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        }
+        break;
+        
+      case 'paddleShrink': // パドル縮小音（ダメージ音風）
+        {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sawtooth';
+          gain.gain.setValueAtTime(0.4, now);
+          
+          // 音程を下降させる
+          osc.frequency.setValueAtTime(500, now);
+          osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        }
+        break;
+        
+      case 'stageClear': // ステージクリア音（3秒の派手なファンファーレ）
+        {
+          // メロディライン
+          const notes = [523, 659, 784, 1047]; // C, E, G, C (高)
+          notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.frequency.value = freq;
+            osc.type = 'sine';
+            const startTime = now + i * 0.4;
+            gain.gain.setValueAtTime(0.4, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.4);
+            osc.start(startTime);
+            osc.stop(startTime + 0.4);
+          });
+          
+          // ベース音
+          const bass = ctx.createOscillator();
+          const bassGain = ctx.createGain();
+          bass.connect(bassGain);
+          bassGain.connect(ctx.destination);
+          bass.frequency.value = 130;
+          bass.type = 'square';
+          bassGain.gain.setValueAtTime(0.2, now);
+          bassGain.gain.exponentialRampToValueAtTime(0.01, now + 2);
+          bass.start(now);
+          bass.stop(now + 2);
+        }
+        break;
+        
+      case 'gameOver': // ゲームオーバー音
+        {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.frequency.value = 150;
+          osc.type = 'sawtooth';
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+          osc.start(now);
+          osc.stop(now + 0.8);
+        }
+        break;
+    }
+  } catch (e) {
+    console.error('サウンド再生エラー:', e);
+  }
+}
+
 // ゲーム状態
 let gameRunning = true;
 let gamePaused = false;
@@ -72,6 +247,9 @@ let paddleHeight = 100;
 let paddleWidth = 10;
 const PADDLE_BASE_HEIGHT = 100;
 const PADDLE_BASE_WIDTH = 10;
+let paddleSpeed = 0.75; // デフォルト速度（0.75倍に設定）
+const PADDLE_BASE_SPEED = 0.75;
+let paddleEffectTimer = null; // タイマー管理
 
 // ブロックの設定
 let blocks = [];
@@ -107,25 +285,26 @@ function initBlocks() {
   spawnRegularBlocks();
 }
 
-// 規則的な位置にブロックを生成（縦8列×横4行）
+// 規則的な位置にブロックを生成（縦8列×横4行、上下均等配置）
 function spawnRegularBlocks() {
   const rows = 8; // 縦8列
   const cols = 4; // 横4行
   const blockSpacing = BLOCK_WIDTH * 1.5; // ブロック1.5個分の間隔
   const startX = canvas.width - blockSpacing - (cols * (BLOCK_WIDTH + 8)); // 右端から余裕を持たせる
-  const startY = 20; // 一番上から開始
+  
   const spacingY = 5; // 縦間隔
   const spacingX = 8; // 横間隔
+  
+  // 8列のブロックの総高さを計算
+  const totalHeight = rows * BLOCK_HEIGHT + (rows - 1) * spacingY;
+  
+  // 上下の余白が均等になるように開始位置を計算
+  const startY = (canvas.height - totalHeight) / 2;
   
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       const x = startX + col * (BLOCK_WIDTH + spacingX);
       const y = startY + row * (BLOCK_HEIGHT + spacingY);
-      
-      // canvas内に収まるか確認
-      if (y + BLOCK_HEIGHT > canvas.height) {
-        continue; // はみ出る場合はスキップ
-      }
       
       // 既存のブロックを確認
       const exists = blocks.some(block => 
@@ -184,12 +363,15 @@ function spawnItem(x, y) {
   });
 }
 
-// マウスイベント
+// マウスイベント（速度調整機能付き）
 canvas.addEventListener("mousemove", e => {
   if (gamePaused || !gameRunning) return;
   
   const rect = canvas.getBoundingClientRect();
-  paddleY = e.clientY - rect.top - paddleHeight / 2;
+  const targetY = e.clientY - rect.top - paddleHeight / 2;
+  
+  // パドル速度に応じて移動（スムーズな追従）
+  paddleY += (targetY - paddleY) * paddleSpeed;
   
   // パドルが画面外に出ないように制限
   if (paddleY < 0) {
@@ -221,17 +403,84 @@ function drawEverything() {
     ctx.fill();
   });
 
-  // パドル
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
+  // パドルの描画（状態に応じて装飾）
+  if (paddleSpeed > 1) {
+    // 高速化状態：スター状態風（金色で輝く）
+    const gradient = ctx.createLinearGradient(0, paddleY, paddleWidth, paddleY + paddleHeight);
+    gradient.addColorStop(0, '#FFD700');
+    gradient.addColorStop(0.5, '#FFF700');
+    gradient.addColorStop(1, '#FFD700');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
+    ctx.strokeStyle = '#FFFF00';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, paddleY, paddleWidth, paddleHeight);
+    
+    // キラキラエフェクト
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = '#FFD700';
+    ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
+    ctx.shadowBlur = 0;
+  } else if (paddleSpeed < 0.5) {
+    // スロー状態：石化・劣化風（グレーで暗い）
+    ctx.fillStyle = '#555555';
+    ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
+    ctx.strokeStyle = '#333333';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, paddleY, paddleWidth, paddleHeight);
+    
+    // クラック模様
+    ctx.strokeStyle = '#222222';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 3; i++) {
+      const y = paddleY + (paddleHeight / 4) * (i + 1);
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(paddleWidth, y);
+      ctx.stroke();
+    }
+  } else {
+    // 通常状態：SF風サイバーデザイン
+    const gradient = ctx.createLinearGradient(0, paddleY, paddleWidth, paddleY + paddleHeight);
+    gradient.addColorStop(0, '#00f7ff');
+    gradient.addColorStop(0.5, '#00d4ff');
+    gradient.addColorStop(1, '#0088ff');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
+    ctx.strokeStyle = '#00ffff';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, paddleY, paddleWidth, paddleHeight);
+  }
   
-  // ブロック
+  // ブロックの描画（ポリゴン風の煌びやかなデザイン）
   blocks.forEach(block => {
     if (block.alive) {
-      ctx.fillStyle = block.color;
+      // グラデーション背景
+      const gradient = ctx.createLinearGradient(block.x, block.y, block.x + block.width, block.y + block.height);
+      gradient.addColorStop(0, '#00f7ff');
+      gradient.addColorStop(0.3, '#00d4ff');
+      gradient.addColorStop(0.7, '#0088ff');
+      gradient.addColorStop(1, '#004488');
+      ctx.fillStyle = gradient;
       ctx.fillRect(block.x, block.y, block.width, block.height);
-      ctx.strokeStyle = "white";
+      
+      // 光る外枠
+      ctx.strokeStyle = '#00ffff';
+      ctx.lineWidth = 2;
       ctx.strokeRect(block.x, block.y, block.width, block.height);
+      
+      // 内側のハイライト（ポリゴン感）
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(block.x + 2, block.y + 2, block.width - 4, block.height - 4);
+      
+      // 対角線（ポリゴン風）
+      ctx.strokeStyle = 'rgba(0, 247, 255, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(block.x, block.y);
+      ctx.lineTo(block.x + block.width, block.y + block.height);
+      ctx.stroke();
     }
   });
   
@@ -282,6 +531,7 @@ function moveEverything() {
         ball.speedX = -ball.speedX;
         let hitPos = (ball.y - paddleY) / paddleHeight;
         ball.speedY = (hitPos - 0.5) * 8;
+        playSound('paddleHit'); // パドル専用の効果音
         addPoint(1);
       } else if (ball.x < 0) {
         // ボールがパドルを外れた
@@ -308,23 +558,39 @@ function moveEverything() {
           
           // ブロック破壊
           block.alive = false;
+          playSound('blockBreak'); // 効果音
           
-          // より正確な反射判定
+          // より確実な反射判定
           const ballCenterX = ball.x;
           const ballCenterY = ball.y;
           const blockCenterX = block.x + block.width / 2;
           const blockCenterY = block.y + block.height / 2;
           
-          const dx = ballCenterX - blockCenterX;
-          const dy = ballCenterY - blockCenterY;
+          const dx = Math.abs(ballCenterX - blockCenterX);
+          const dy = Math.abs(ballCenterY - blockCenterY);
           
-          // 横から当たったか縦から当たったかを判定
-          if (Math.abs(dx / block.width) > Math.abs(dy / block.height)) {
+          const overlapX = (BALL_RADIUS + block.width / 2) - dx;
+          const overlapY = (BALL_RADIUS + block.height / 2) - dy;
+          
+          // どちらの軸でより深く侵入しているかで判定
+          if (overlapX < overlapY) {
             // 横から当たった
             ball.speedX = -ball.speedX;
+            // ボールを押し出す
+            if (ballCenterX < blockCenterX) {
+              ball.x -= overlapX;
+            } else {
+              ball.x += overlapX;
+            }
           } else {
             // 縦から当たった
             ball.speedY = -ball.speedY;
+            // ボールを押し出す
+            if (ballCenterY < blockCenterY) {
+              ball.y -= overlapY;
+            } else {
+              ball.y += overlapY;
+            }
           }
           
           addPoint(5);
@@ -347,6 +613,16 @@ function moveEverything() {
         item.x + ITEM_SIZE/2 > 0 &&
         item.y + ITEM_SIZE/2 > paddleY &&
         item.y - ITEM_SIZE/2 < paddleY + paddleHeight) {
+      // アイテムの種類に応じて効果音を分ける
+      const positiveItems = ['paddleLarge', 'multiBall', 'paddleFast'];
+      const negativeItems = ['paddleSmall', 'removeBall', 'paddleSlow'];
+      
+      if (positiveItems.includes(item.effect)) {
+        playSound('itemPositive');
+      } else if (negativeItems.includes(item.effect)) {
+        playSound('itemNegative');
+      }
+      
       applyItemEffect(item.effect);
       items.splice(index, 1);
     }
@@ -370,8 +646,11 @@ function applyItemEffect(effect) {
   switch(effect) {
     case 'paddleLarge':
       paddleHeight = Math.min(paddleHeight * 1.5, 200);
-      setTimeout(() => {
+      playSound('paddleGrow'); // パドル拡大音
+      if (paddleEffectTimer) clearTimeout(paddleEffectTimer);
+      paddleEffectTimer = setTimeout(() => {
         paddleHeight = PADDLE_BASE_HEIGHT;
+        playSound('paddleShrink'); // 元に戻る音
       }, 10000);
       break;
       
@@ -394,38 +673,33 @@ function applyItemEffect(effect) {
       break;
       
     case 'paddleSlow':
-      // パドルの移動速度を遅くする（マウス感度を下げる）
+      // パドルの移動速度を遅くする
+      paddleSpeed = 0.3; // デフォルト0.75の約40%
       canvas.style.cursor = 'not-allowed';
-      const originalMouseMove = canvas.onmousemove;
-      let slowFactor = 0.5;
-      canvas.addEventListener('mousemove', function slowMove(e) {
-        if (gamePaused || !gameRunning) return;
-        const rect = canvas.getBoundingClientRect();
-        const targetY = e.clientY - rect.top - paddleHeight / 2;
-        paddleY += (targetY - paddleY) * slowFactor;
-        
-        if (paddleY < 0) paddleY = 0;
-        if (paddleY > canvas.height - paddleHeight) {
-          paddleY = canvas.height - paddleHeight;
-        }
-      });
-      setTimeout(() => {
+      if (paddleEffectTimer) clearTimeout(paddleEffectTimer);
+      paddleEffectTimer = setTimeout(() => {
+        paddleSpeed = PADDLE_BASE_SPEED;
         canvas.style.cursor = 'default';
-        canvas.removeEventListener('mousemove', slowMove);
       }, 8000);
       break;
       
     case 'paddleSmall':
       paddleHeight = Math.max(paddleHeight * 0.5, 50);
-      setTimeout(() => {
+      playSound('paddleShrink'); // パドル縮小音
+      if (paddleEffectTimer) clearTimeout(paddleEffectTimer);
+      paddleEffectTimer = setTimeout(() => {
         paddleHeight = PADDLE_BASE_HEIGHT;
+        playSound('paddleGrow'); // 元に戻る音
       }, 8000);
       break;
       
     case 'paddleFast':
-      // パドルの移動速度を速くする（マウス感度を上げる）
+      // パドルの移動速度を速くする
+      paddleSpeed = 1.5; // デフォルト0.75の2倍
       canvas.style.cursor = 'move';
-      setTimeout(() => {
+      if (paddleEffectTimer) clearTimeout(paddleEffectTimer);
+      paddleEffectTimer = setTimeout(() => {
+        paddleSpeed = PADDLE_BASE_SPEED;
         canvas.style.cursor = 'default';
       }, 6000);
       break;
@@ -481,6 +755,7 @@ function updateUI() {
 // ゲームオーバー
 function gameOver() {
   gameRunning = false;
+  playSound('gameOver'); // 効果音
   finalScoreElement.textContent = score;
   
   // 最高スコア更新
@@ -520,6 +795,8 @@ function restartGame() {
   gameStartTime = Date.now();
   paddleHeight = PADDLE_BASE_HEIGHT;
   paddleWidth = PADDLE_BASE_WIDTH;
+  paddleSpeed = PADDLE_BASE_SPEED; // パドル速度をリセット
+  canvas.style.cursor = 'default';
   
   balls = [{
     x: canvas.width / 2,
@@ -543,9 +820,26 @@ function restartGame() {
 // ステージクリア
 function stageClear() {
   gamePaused = true;
+  playSound('stageClear'); // 3秒の派手なファンファーレ
+  
+  // エフェクト演出（画面フラッシュ）
+  let flashCount = 0;
+  const flashInterval = setInterval(() => {
+    canvas.style.filter = flashCount % 2 === 0 ? 'brightness(2)' : 'brightness(1)';
+    flashCount++;
+    if (flashCount > 6) {
+      clearInterval(flashInterval);
+      canvas.style.filter = 'brightness(1)';
+    }
+  }, 200);
+  
   clearedStageElement.textContent = currentStage;
   stageScoreElement.textContent = score;
-  stageClearScreen.style.display = "block";
+  
+  // 少し遅延してからクリア画面を表示（演出のため）
+  setTimeout(() => {
+    stageClearScreen.style.display = "block";
+  }, 1000);
 }
 
 // 次のステージへ
@@ -601,6 +895,27 @@ function gameLoop() {
   moveEverything();
   drawEverything();
 }
+
+// サウンドトグルボタン（DOMContentLoaded後に実行）
+document.addEventListener('DOMContentLoaded', function() {
+  const soundToggleBtn = document.getElementById('soundToggle');
+  if (soundToggleBtn) {
+    soundToggleBtn.addEventListener('click', function() {
+      soundEnabled = !soundEnabled;
+      
+      // AudioContextを初期化（ユーザー操作が必要）
+      if (soundEnabled) {
+        initAudioContext();
+        soundToggleBtn.textContent = '🔊 サウンドON';
+        soundToggleBtn.classList.remove('muted');
+        playSound('itemGet'); // テストサウンド
+      } else {
+        soundToggleBtn.textContent = '🔇 サウンドOFF';
+        soundToggleBtn.classList.add('muted');
+      }
+    });
+  }
+});
 
 // 初期化
 initBlocks();

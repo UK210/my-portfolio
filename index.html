@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>橘右京のポートフォリオ - ゲーム開発者</title>
-  <meta name="description" content="JavaScriptでゲーム開発に挑戦中。テニスゲームなどのブラウザゲームを公開しています。" />
+  <title>BLOCK INVADERS - Futuristic Block Breaking Game</title>
+  <meta name="description" content="ブロック崩しとインベーダーを融合させた近未来型ゲーム！5つのステージをクリアして最高スコアを目指そう。" />
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Audiowide&family=Electrolize&display=swap" rel="stylesheet">
   
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5958889768519885"
@@ -25,15 +25,19 @@
   <header class="header">
     <div class="container">
       <div class="logo">
-        <h1 class="logo-text">UKYO</h1>
-        <span class="logo-subtitle">PORTFOLIO</span>
+        <h1 class="logo-text">BLOCK INVADERS</h1>
+        <span class="logo-subtitle">ARCADE GAMES</span>
       </div>
       <nav class="nav">
-        <a href="game/tennis_game/tennis.html" class="nav-link">
-          <span class="nav-icon">🎾</span>
-          <span class="nav-text">テニスゲーム</span>
-        </a>
-      </nav>
+        <button class="hamburger" id="hamburger" aria-label="メニュー">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+        <div class="nav-menu" id="navMenu">
+          <!-- メニュー内容は後で追加 -->
+        </div>
+    </nav>
     </div>
   </header>
 
@@ -49,58 +53,33 @@
            data-full-width-responsive="true"></ins>
     </div>
 
-    <section class="hero">
+    <!-- ゲーム一覧セクション -->
+    <section class="games-section">
       <div class="container">
-        <div class="hero-content">
-          <h2 class="hero-title">
-            <span class="title-line">橘右京</span>
-            <span class="title-line">のポートフォリオ</span>
-          </h2>
-          <p class="hero-description">
-            プログラミング学習中。<br>
-            JavaScriptでゲーム開発挑戦中！
-          </p>
-          <div class="skills">
-            <span class="skill-tag">JavaScript</span>
-            <span class="skill-tag">HTML5</span>
-            <span class="skill-tag">CSS3</span>
-            <span class="skill-tag">ゲーム開発</span>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="code-block">
-            <div class="code-line">
-              <span class="code-keyword">function</span>
-              <span class="code-function">createGame()</span>
-              <span class="code-bracket">{</span>
+        <h2 class="section-title">🎮 ゲーム一覧</h2>
+        
+        <div class="game-grid">
+          <!-- BLOCK INVADERS -->
+          <a href="game/tennis_game/tennis.html" class="game-card">
+            <div class="game-card-header">
+              <div class="game-icon">👾</div>
+              <h3 class="game-title">BLOCK INVADERS</h3>
             </div>
-            <div class="code-line">
-              <span class="code-space"></span>
-              <span class="code-comment">// ゲームを作成中...</span>
+            <div class="game-card-body">
+              <p class="game-description">
+                ブロック崩しとスペースインベーダーを融合した近未来型アーケードゲーム。5つのステージを突破し、銀河の最高スコアを目指せ！
+              </p>
+              <div class="game-features">
+                <span class="feature-tag">🚀 5ステージ制</span>
+                <span class="feature-tag">⚡ パワーアップ</span>
+                <span class="feature-tag">🏆 ハイスコア</span>
+                <span class="feature-tag">🎮 マルチボール</span>
+              </div>
             </div>
-            <div class="code-line">
-              <span class="code-bracket">}</span>
+            <div class="game-card-footer">
+              <span class="play-button">START GAME →</span>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="projects">
-      <div class="container">
-        <h3 class="section-title">プロジェクト</h3>
-        <div class="project-card">
-          <div class="project-icon">🎾</div>
-          <div class="project-content">
-            <h4 class="project-title">テニスゲーム</h4>
-            <p class="project-description">
-              ポイント制、スピードアップ、一時中断機能付きの
-              モダンなテニスゲーム
-            </p>
-            <a href="game/tennis_game/tennis.html" class="project-link">
-              プレイする →
-            </a>
-          </div>
+          </a>
         </div>
       </div>
     </section>
@@ -186,7 +165,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p>© 2025 UKYO TACHIBANA</p>
+    <p>© 2025 UKYO TACHIBANA</p>
     </div>
   </footer>
 
@@ -197,6 +176,17 @@
       particles.forEach((particle, index) => {
         particle.style.animationDelay = `${index * 0.5}s`;
       });
+      
+      // ハンバーガーメニュー
+      const hamburger = document.getElementById('hamburger');
+      const navMenu = document.getElementById('navMenu');
+      
+      if (hamburger && navMenu) {
+        hamburger.addEventListener('click', function() {
+          hamburger.classList.toggle('active');
+          navMenu.classList.toggle('active');
+        });
+      }
     });
   </script>
 
