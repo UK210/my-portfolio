@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BUBBLE SHOOTER SF - サイバーバブルシューター</title>
+  <meta name="description" content="SF風の近未来型バブルシューターゲーム！同じ色を3つ以上揃えて消そう。" />
+  <link rel="stylesheet" href="bubble.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Audiowide&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1>🔮 BUBBLE SHOOTER SF</h1>
+  
+  <!-- 上部の情報表示 -->
+  <div id="topInfo">
+    <div class="info-left">
+      <div>レベル: <span id="levelDisplay">1</span></div>
+      <div>残弾: <span id="bulletsLeft">∞</span></div>
+    </div>
+    <div class="info-right">
+      <div>スコア: <span id="score">0</span></div>
+      <div>最高: <span id="highScore">0</span></div>
+    </div>
+  </div>
+  
+  <div id="controls">
+    <p>🎮 操作方法: マウスで狙いを定めてクリックで発射 | スペースキーで一時中断</p>
+    <button id="soundToggle" class="sound-button">🔊 サウンドON</button>
+  </div>
+  
+  <canvas id="gameCanvas" width="600" height="700"></canvas>
+  
+  <!-- ゲームオーバー画面 -->
+  <div id="gameOverScreen" style="display: none;">
+    <h2>ゲームオーバー！</h2>
+    <p>最終スコア: <span id="finalScore">0</span></p>
+    <button onclick="restartGame()">もう一度プレイ</button>
+  </div>
+  
+  <!-- 一時中断画面 -->
+  <div id="pauseScreen" style="display: none;">
+    <h2>⏸️ 一時中断</h2>
+    <p>スペースキーまたはボタンでゲームを再開</p>
+    <button onclick="togglePause()">ゲーム再開</button>
+  </div>
+  
+  <!-- レベルクリア画面 -->
+  <div id="levelClearScreen" style="display: none;">
+    <h2>🎉 レベルクリア！</h2>
+    <p>レベル <span id="clearedLevel">1</span> クリア！</p>
+    <p>スコア: <span id="levelScore">0</span></p>
+    <button onclick="nextLevel()">次のレベルへ →</button>
+  </div>
+  
+  <script src="bubble.js"></script>
+</body>
+</html>
+
+

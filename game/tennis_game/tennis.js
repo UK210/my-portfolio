@@ -251,6 +251,16 @@ let paddleSpeed = 0.75; // デフォルト速度（0.75倍に設定）
 const PADDLE_BASE_SPEED = 0.75;
 let paddleEffectTimer = null; // タイマー管理
 
+// 描画の最適化：色を事前定義
+const COLORS = {
+  paddleNormal: '#00d4ff',
+  paddleFast: '#FFD700',
+  paddleSlow: '#555555',
+  blockMain: '#00d4ff',
+  blockBorder: '#00ffff',
+  ballColor: 'white'
+};
+
 // ブロックの設定
 let blocks = [];
 const BLOCK_WIDTH = 20; // 縦長ブロック：幅を狭く
@@ -406,21 +416,11 @@ function drawEverything() {
   // パドルの描画（状態に応じて装飾）
   if (paddleSpeed > 1) {
     // 高速化状態：スター状態風（金色で輝く）
-    const gradient = ctx.createLinearGradient(0, paddleY, paddleWidth, paddleY + paddleHeight);
-    gradient.addColorStop(0, '#FFD700');
-    gradient.addColorStop(0.5, '#FFF700');
-    gradient.addColorStop(1, '#FFD700');
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = '#FFD700';
     ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
     ctx.strokeStyle = '#FFFF00';
     ctx.lineWidth = 2;
     ctx.strokeRect(0, paddleY, paddleWidth, paddleHeight);
-    
-    // キラキラエフェクト
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = '#FFD700';
-    ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
-    ctx.shadowBlur = 0;
   } else if (paddleSpeed < 0.5) {
     // スロー状態：石化・劣化風（グレーで暗い）
     ctx.fillStyle = '#555555';
@@ -428,24 +428,9 @@ function drawEverything() {
     ctx.strokeStyle = '#333333';
     ctx.lineWidth = 2;
     ctx.strokeRect(0, paddleY, paddleWidth, paddleHeight);
-    
-    // クラック模様
-    ctx.strokeStyle = '#222222';
-    ctx.lineWidth = 1;
-    for (let i = 0; i < 3; i++) {
-      const y = paddleY + (paddleHeight / 4) * (i + 1);
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(paddleWidth, y);
-      ctx.stroke();
-    }
   } else {
     // 通常状態：SF風サイバーデザイン
-    const gradient = ctx.createLinearGradient(0, paddleY, paddleWidth, paddleY + paddleHeight);
-    gradient.addColorStop(0, '#00f7ff');
-    gradient.addColorStop(0.5, '#00d4ff');
-    gradient.addColorStop(1, '#0088ff');
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = '#00d4ff';
     ctx.fillRect(0, paddleY, paddleWidth, paddleHeight);
     ctx.strokeStyle = '#00ffff';
     ctx.lineWidth = 2;
@@ -501,11 +486,6 @@ function drawEverything() {
     ctx.textBaseline = "middle";
     ctx.fillStyle = "white";
     ctx.fillText(item.emoji, item.x, item.y);
-    
-    // アイテム効果のテキスト
-    ctx.font = "12px Arial";
-    ctx.fillStyle = "white";
-    ctx.fillText(getItemName(item.effect), item.x, item.y + ITEM_SIZE);
   });
   
   // canvas内のスコア表示は削除（HTML側で表示）
@@ -548,13 +528,15 @@ function moveEverything() {
       ball.speedX = -ball.speedX;
     }
     
-    // ブロックとの衝突（より正確な反射）
-    blocks.forEach(block => {
-      if (block.alive) {
-        if (ball.x + BALL_RADIUS > block.x &&
-            ball.x - BALL_RADIUS < block.x + block.width &&
-            ball.y + BALL_RADIUS > block.y &&
-            ball.y - BALL_RADIUS < block.y + block.height) {
+    // ブロックとの衝突（最適化版）
+    for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i];
+      if (!block.alive) continue;
+      
+      if (ball.x + BALL_RADIUS > block.x &&
+          ball.x - BALL_RADIUS < block.x + block.width &&
+          ball.y + BALL_RADIUS > block.y &&
+          ball.y - BALL_RADIUS < block.y + block.height) {
           
           // ブロック破壊
           block.alive = false;
@@ -599,9 +581,10 @@ function moveEverything() {
           if (Math.random() < 0.3) {
             spawnItem(block.x + block.width / 2, block.y + block.height / 2);
           }
+          
+          break; // 1つのブロックに当たったらループ終了（最適化）
         }
-      }
-    });
+    }
   });
   
   // アイテムの移動
